@@ -15,7 +15,26 @@ class chip_extraction():
     self.h = ori_template.shape[1]
     self.de_res = de_res
     self.match_threshold = match_threshold
-    
+   
+    # 解像度の低いグレー画像を作る
+    img_gray, template_gray = self.degrade_gray(ori_img, ori_template, de_res)
+
+    #ちょっとずつ角度を変えたtemplate画像を作る
+    template_list = self.rotate_img(template_gray, match_angles)
+
+    #元画像に対して、テンプレート画像との類似度を算出
+    #取得するのは左下の点
+    point_list_all = self.do_matching(img_gray,template_list, match_threshold)
+
+    #距離が近い点同士をまとめる
+    #解像度が下がった
+    result_point, _ = self.group_neighbors(point_list_all,distance)
+    print('取得した点→',result_point)
+
+    #まとめたグループ同士の平均の位置を求める
+    chip_point_list = self.group_mean(result_point)
+    self.chip_point_list = chip_point_list
+  
   # 解像度の低いグレー画像を作る
   def degrade_gray(self, img, template, de_res):
 
@@ -48,7 +67,7 @@ class chip_extraction():
       rot_image_list.append(cv2.warpAffine(template, M, (width, height)))
 
     #回転した画像の表示など
-    print('-------------テンプレートの画像----------------')
+    print('-------------解像度を下げて回転させたテンプレートの画像----------------')
     # サブプロットの数に応じて処理を分ける
     if len(rot_image_list) == 1:
         fig, ax = plt.subplots()
@@ -100,9 +119,8 @@ class chip_extraction():
         pt_list.remove(k)
       result.append(temp_list)
 
-    print('--------------画像の数-------------')
-    print(len(result))
-    return result, parse_http_list
+    print(len('距離が近い点のグループ数→',result))
+    return result
 
   #まとめたグループ同士の平均の位置を求める
   def group_mean(self, pt_group):
