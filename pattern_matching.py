@@ -119,7 +119,7 @@ class chip_extraction():
         pt_list.remove(k)
       result.append(temp_list)
 
-    print(len('距離が近い点のグループ数→',result))
+    print('距離が近い点のグループ数→', len(result))
     return result
 
   #まとめたグループ同士の平均の位置を求める
