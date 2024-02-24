@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import copy
 
-
-from urllib.request import parse_http_list
 class chip_extraction():
   def __init__(self, ori_img, ori_template, match_angles, match_threshold, de_res, distance):
     #self.angles = match_angles
@@ -28,7 +26,7 @@ class chip_extraction():
 
     #距離が近い点同士をまとめる
     #解像度が下がった
-    result_point, _ = self.group_neighbors(point_list_all,distance)
+    result_point = self.group_neighbors(point_list_all,distance)
     print('取得した点→',result_point)
 
     #まとめたグループ同士の平均の位置を求める
@@ -63,11 +61,10 @@ class chip_extraction():
       center = (int(width/2) , int(height/2))
       #回転行列
       M = cv2.getRotationMatrix2D(center, angle, 1.0)
-      #アフィン変換
-      rot_image_list.append(cv2.warpAffine(template, M, (width, height)))
+      rot_image_list.append(cv2.warpAffine(template, M, (width,height)))
 
     #回転した画像の表示など
-    print('-------------解像度を下げて回転させたテンプレートの画像----------------')
+    print('-------------解像度を下げて回転させたテンプレートの画像テスト----------------')
     # サブプロットの数に応じて処理を分ける
     if len(rot_image_list) == 1:
         fig, ax = plt.subplots()
@@ -144,7 +141,9 @@ class chip_extraction():
 
     #解像度をもどして(5倍にして)四角形を書く
     for pt in self.chip_point_list:
-      cv2.rectangle(img_red, (pt[0]*5, pt[1]*5), (pt[0]*5+self.h, pt[1]*5+self.w), (255,0,0), 5)
+      cv2.rectangle(img=img_red, 
+                    pt1=(int(pt[0]/self.de_res), int(pt[1]/self.de_res)), pt2=(int(pt[0]/self.de_res)+self.h, int(pt[1]/self.de_res)+self.w), 
+                    color=(255,0,0), thickness=5)
 
     plt.imshow(img_red)
     plt.show()
