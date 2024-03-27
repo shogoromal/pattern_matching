@@ -27,7 +27,7 @@ class chip_extraction():
     #距離が近い点同士をまとめる
     #解像度が下がった
     result_point = self.group_neighbors(point_list_all,distance)
-    print('取得した点→',result_point)
+    #print('取得した点→',result_point)
 
     #まとめたグループ同士の平均の位置を求める
     chip_point_list = self.group_mean(result_point)
@@ -64,7 +64,7 @@ class chip_extraction():
       rot_image_list.append(cv2.warpAffine(template, M, (width,height)))
 
     #回転した画像の表示など
-    print('-------------解像度を下げて回転させたテンプレートの画像テスト----------------')
+    print('-------------解像度を下げて回転させたテンプレートの画像の表示----------------')
     # サブプロットの数に応じて処理を分ける
     if len(rot_image_list) == 1:
         fig, ax = plt.subplots()
@@ -79,6 +79,7 @@ class chip_extraction():
             axs[i].axis('off')
             axs[i].imshow(img, cmap='gray')
     plt.show()
+    print('----------------------------------------------------------------------')
     return rot_image_list
 
   #元画像に対して、テンプレート画像の類似度を計算する
@@ -97,7 +98,7 @@ class chip_extraction():
       for pt in zip(*loc[::-1]):
         point_list.append(pt)
 
-    print('マッチング数→', len(point_list))
+    print('マッチング数(閾値を超えてマッチングしたと判断された点の数)→', len(point_list))
     return point_list
 
   def cal_distance(self, a, b):
@@ -116,7 +117,7 @@ class chip_extraction():
         pt_list.remove(k)
       result.append(temp_list)
 
-    print('距離が近い点のグループ数→', len(result))
+    print('距離が近い点(distanceで指定した距離以内の点)のグループ数→', len(result))
     return result
 
   #まとめたグループ同士の平均の位置を求める
@@ -143,7 +144,7 @@ class chip_extraction():
     for pt in self.chip_point_list:
       cv2.rectangle(img=img_red, 
                     pt1=(int(pt[0]/self.de_res), int(pt[1]/self.de_res)), pt2=(int(pt[0]/self.de_res)+self.h, int(pt[1]/self.de_res)+self.w), 
-                    color=(255,0,0), thickness=5)
+                    color=(255,0,0), thickness=2)
 
     plt.imshow(img_red)
     plt.show()
@@ -158,5 +159,5 @@ class chip_extraction():
     pt_5 = (pt[0]*5, pt[1]*5)
     right_upper = (pt[0]*5+self.h, pt[1]*5+self.w)
 
-    plt.imshow(self.o_img[pt_5[1]:right_upper[1], pt_5[0]:right_upper[0]])
+    plt.imshow(self.ori_img[pt_5[1]:right_upper[1], pt_5[0]:right_upper[0]])
     plt.show()
