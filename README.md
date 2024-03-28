@@ -1,8 +1,8 @@
 # 画像のパターンマッチング
 テンプレートとして選んだ画像と類似度が高い部分を抽出する。  
-- google colab
+- google colab  
 https://colab.research.google.com/drive/15K3r2psWsI6RGNC1bY5NYo77hybdf1O9?usp=sharing
-- 使用画像の引用元
+- 使用画像の引用元  
 https://ninchi.life/print12684/
 
 ## 具体的な手順について  
