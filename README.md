@@ -5,7 +5,7 @@ https://colab.research.google.com/drive/15K3r2psWsI6RGNC1bY5NYo77hybdf1O9?usp=sh
 - 使用画像の引用元  
 https://ninchi.life/print12684/
 
-## 具体的な手順について  
+## 具体的な手順について(pattern_matching.pyの解説)  
 ### テンプレートの作成  
 今回は、「友」の漢字を抽出したいので、「友」の漢字1文字が含まれるように画像を切り取り、これをテンプレートとして使用する。
 ~~~
@@ -22,7 +22,7 @@ plt.imshow(template)
 plt.show()
 ~~~
 ### 解像度を落とす・グレースケール化
-あとで用いる画像類似度の計算で、1ピクセルずらして元画像とテンプレートの類似度を計算するという操作を繰り返すため、ここで解像度を落とした方が計算が早くなります。
+あとで用いる画像類似度の計算で、1ピクセルずらして元画像とテンプレートの類似度を計算するという操作を繰り返すため、ここで解像度を落とした方が計算が早くなる。
 ~~~
 def degrade_gray(self, img, template, de_res):
 
@@ -37,7 +37,7 @@ def degrade_gray(self, img, template, de_res):
     return img_gray, template_gray
 ~~~
 ### 少し回転させたテンプレート画像を作成
-半導体チップの場合は顕微鏡の画像上で角度が最大10°程度回転している場合があったため、この操作によってマッチング率が大幅に向上した。
+少し角度がずれている対象に対しても、マッチング精度を向上させることができる。
 ~~~
  #ちょっとずつ角度を変えたtemplate画像を作る
   def rotate_img(self, template, match_angles):

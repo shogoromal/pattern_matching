@@ -140,7 +140,7 @@ class chip_extraction():
   def check_result(self):
     img_red = copy.copy(self.ori_img)
 
-    #解像度をもどして(5倍にして)四角形を書く
+    #解像度をもどして四角形を書く
     for pt in self.chip_point_list:
       cv2.rectangle(img=img_red, 
                     pt1=(int(pt[0]/self.de_res), int(pt[1]/self.de_res)), pt2=(int(pt[0]/self.de_res)+self.h, int(pt[1]/self.de_res)+self.w), 
@@ -156,8 +156,8 @@ class chip_extraction():
 
     pt = self.chip_point_list[num]
 
-    pt_5 = (pt[0]*5, pt[1]*5)
-    right_upper = (pt[0]*5+self.h, pt[1]*5+self.w)
+    pt_ori = (pt[0]/self.de_res, pt[1]/self.de_res)
+    right_upper = (pt[0]/self.de_res+self.h, pt[1]/self.de_res+self.w)
 
-    plt.imshow(self.ori_img[pt_5[1]:right_upper[1], pt_5[0]:right_upper[0]])
+    plt.imshow(self.ori_img[pt_ori[1]:right_upper[1], pt_ori[0]:right_upper[0]])
     plt.show()
